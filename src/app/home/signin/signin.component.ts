@@ -17,36 +17,37 @@ export class SignInComponent implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private platformDetectorService: PlatformDetectorService
-    ){}
-    ngAfterViewInit(): void {
-      if(this.platformDetectorService.isPlatformBrowser()) {
-       this.userNameInput.nativeElement.focus();
-     }
-   }
-    ngOnInit(): void {
-      this.loginForm = this.formBuilder.group({
-          userName: ['', Validators.required],
-          password: ['', Validators.required]
-      });
-    }
-  login() {
+    private platformDetectorService: PlatformDetectorService,
+  ) { }
 
+  ngAfterViewInit(): void {
+    if (this.platformDetectorService.isPlatformBrowser()) {
+      this.userNameInput.nativeElement.focus();
+    }
+  }
+  ngOnInit(): void {
+
+    this.loginForm = this.formBuilder.group({
+      userName: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
+  login() {
     const userName = this.loginForm.get('userName').value;
     const password = this.loginForm.get('password').value;
 
     this.authService
-        .autenticate(userName, password)
-        .subscribe(
-            () => this.router.navigate(['user',userName]),
-            err => {
-                console.log(err);
-                this.loginForm.reset();
-                this.platformDetectorService.isPlatformBrowser() &&
-                this.userNameInput.nativeElement.focus();
-                alert('Invalid user name or password!');
-            }
-        );
-}
+      .autenticate(userName, password)
+      .subscribe(
+        () => this.router.navigate(['user', userName]),
+        err => {
+          console.log(err);
+          this.loginForm.reset();
+          this.platformDetectorService.isPlatformBrowser() &&
+            this.userNameInput.nativeElement.focus();
+          alert('Invalid user name or password!');
+        }
+      );
+  }
 
 }
